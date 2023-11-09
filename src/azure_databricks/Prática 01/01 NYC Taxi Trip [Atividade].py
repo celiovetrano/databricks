@@ -157,6 +157,18 @@ display(df)
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC
+# MAGIC select round(sum(total_amount), 2) as maior_receita
+# MAGIC       ,PULocationID
+# MAGIC from taxi_trips
+# MAGIC group by PULocationID
+# MAGIC order by maior_receita desc
+# MAGIC limit 5
+# MAGIC
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC #### Pergunta 6: Qual é o valor médio das corridas por tipo de pagamento?
 
@@ -178,6 +190,47 @@ display(df)
 
 # MAGIC %md
 # MAGIC #### Pergunta 8: Qual é a duração média das corridas que começam e terminam na mesma localização?
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC
+# MAGIC select count(PULocationID)
+# MAGIC from taxi_trips
+# MAGIC WHERE PULocationID = DOLocationID
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC
+# MAGIC select count(*)
+# MAGIC from taxi_trips
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC
+# MAGIC SELECT
+# MAGIC     round(avg(datediff(minute, tpep_pickup_datetime, tpep_dropoff_datetime)), 2) AS duracao_media_min,
+# MAGIC     PULocationID
+# MAGIC FROM 
+# MAGIC     taxi_trips
+# MAGIC WHERE PULocationID = DOLocationID
+# MAGIC GROUP BY PULocationID
+# MAGIC order by duracao_media_min desc
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC
+# MAGIC SELECT
+# MAGIC     round(avg(datediff(hour, tpep_pickup_datetime, tpep_dropoff_datetime)), 2) AS duracao_media_hh,
+# MAGIC     PULocationID
+# MAGIC FROM 
+# MAGIC     taxi_trips
+# MAGIC WHERE PULocationID = DOLocationID
+# MAGIC GROUP BY PULocationID
+# MAGIC order by duracao_media_hh desc
 
 # COMMAND ----------
 
