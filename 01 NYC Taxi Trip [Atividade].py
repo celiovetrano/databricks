@@ -19,18 +19,6 @@ df = spark.read.csv("dbfs:/databricks-datasets/nyctaxi/tripdata/yellow/yellow_tr
 
 df.createOrReplaceTempView("taxi_trips")
 
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC
-# MAGIC    SELECT *
-# MAGIC     FROM taxi_trips
-# MAGIC
-
-# COMMAND ----------
-
-df.createOrReplaceTempView("taxi_trips")
-
 query = """
     SELECT *
     FROM taxi_trips
@@ -50,11 +38,8 @@ spark.sql(query).display()
 
 # COMMAND ----------
 
-display(df)
-
-# COMMAND ----------
-
 # MAGIC %sql
+# MAGIC
 # MAGIC SELECT
 # MAGIC   DATE_FORMAT(tpep_pickup_datetime, 'H') AS pickup_time,
 # MAGIC   COUNT(*) AS num_trips
@@ -62,24 +47,12 @@ display(df)
 # MAGIC   GROUP BY
 # MAGIC   pickup_time
 # MAGIC   ORDER BY
-# MAGIC   num_trips DESC, pickup_time
+# MAGIC   num_trips DESC
 
 # COMMAND ----------
 
 # MAGIC %md
 # MAGIC #### Pergunta 2: Qual é a média de distância percorrida por viagem em cada dia da semana?
-
-# COMMAND ----------
-
-# MAGIC %sql
-# MAGIC
-# MAGIC select
-# MAGIC   dayofweek(tpep_pickup_datetime) as day_of_week,
-# MAGIC   avg(trip_distance)
-# MAGIC from taxi_trips
-# MAGIC group by
-# MAGIC   day_of_week
-# MAGIC
 
 # COMMAND ----------
 
@@ -90,11 +63,11 @@ display(df)
 
 # MAGIC %sql
 # MAGIC
-# MAGIC SELECT count(VendorID), date_format (tpep_dropoff_datetime, 'E') a
+# MAGIC SELECT count(VendorId), date_format (tpep_dropoff_datetime, 'E') a
 # MAGIC     FROM taxi_trips
 # MAGIC     WHERE payment_type == 2
 # MAGIC     group by a
-# MAGIC     order by count(VendorId)
+# MAGIC     order by count(vendorId)
 
 # COMMAND ----------
 
@@ -103,8 +76,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC % sql
-# MAGIC
+# MAGIC %sql
 # MAGIC SELECT
 # MAGIC     DAYOFWEEK(tpep_pickup_datetime) AS diaSemana,
 # MAGIC     SUM(CASE WHEN trip_distance < 2 THEN 1 ELSE 0 END) AS viagemCurta,
@@ -126,6 +98,32 @@ display(df)
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC SELECT
+# MAGIC   DATE_FORMAT(tpep_pickup_datetime, 'H') AS hora,
+# MAGIC   avg(tip_amount) AS melhor_gorjeta
+# MAGIC FROM
+# MAGIC   taxi_trips
+# MAGIC GROUP BY
+# MAGIC   hora
+# MAGIC ORDER BY
+# MAGIC   melhor_gorjeta DESC;
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT
+# MAGIC   DATE_FORMAT(tpep_dropoff_datetime, 'H') AS hora,
+# MAGIC   avg(tip_amount) AS melhor_gorjeta
+# MAGIC FROM
+# MAGIC   taxi_trips
+# MAGIC GROUP BY
+# MAGIC   hora
+# MAGIC ORDER BY
+# MAGIC   melhor_gorjeta DESC;
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC #### Pergunta: Quais são os cinco principais locais de partida (PULocationID) que resultam na maior receita total?
 
@@ -138,6 +136,15 @@ display(df)
 
 # MAGIC %md
 # MAGIC #### Pergunta 7: Como a distância média das viagens varia ao longo do dia?
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC
+# MAGIC SELECT CAST(EXTRACT(HOUR FROM tpep_pickup_datetime) AS INT) AS HoraDoDia, AVG(trip_distance) AS DistanciaMedia
+# MAGIC FROM taxi_trips
+# MAGIC GROUP BY EXTRACT(HOUR FROM tpep_pickup_datetime)
+# MAGIC ORDER BY HoraDoDia ASC;
 
 # COMMAND ----------
 
