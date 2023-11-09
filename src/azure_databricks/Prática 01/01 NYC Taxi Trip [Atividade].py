@@ -103,7 +103,7 @@ display(df)
 
 # COMMAND ----------
 
-# MAGIC % sql
+# MAGIC %sql
 # MAGIC
 # MAGIC SELECT
 # MAGIC     DAYOFWEEK(tpep_pickup_datetime) AS diaSemana,
@@ -126,6 +126,32 @@ display(df)
 
 # COMMAND ----------
 
+# MAGIC %sql
+# MAGIC SELECT
+# MAGIC   DATE_FORMAT(tpep_pickup_datetime, 'H') AS hora,
+# MAGIC   avg(tip_amount) AS melhor_gorjeta
+# MAGIC FROM
+# MAGIC   taxi_trips
+# MAGIC GROUP BY
+# MAGIC   hora
+# MAGIC ORDER BY
+# MAGIC   melhor_gorjeta DESC;
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC SELECT
+# MAGIC   DATE_FORMAT(tpep_dropoff_datetime, 'H') AS hora,
+# MAGIC   avg(tip_amount) AS melhor_gorjeta
+# MAGIC FROM
+# MAGIC   taxi_trips
+# MAGIC GROUP BY
+# MAGIC   hora
+# MAGIC ORDER BY
+# MAGIC   melhor_gorjeta DESC;
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC #### Pergunta: Quais são os cinco principais locais de partida (PULocationID) que resultam na maior receita total?
 
@@ -138,6 +164,15 @@ display(df)
 
 # MAGIC %md
 # MAGIC #### Pergunta 7: Como a distância média das viagens varia ao longo do dia?
+
+# COMMAND ----------
+
+# MAGIC %sql
+# MAGIC
+# MAGIC SELECT CAST(EXTRACT(HOUR FROM tpep_pickup_datetime) AS INT) AS HoraDoDia, AVG(trip_distance) AS DistanciaMedia
+# MAGIC FROM taxi_trips
+# MAGIC GROUP BY EXTRACT(HOUR FROM tpep_pickup_datetime)
+# MAGIC ORDER BY HoraDoDia ASC;
 
 # COMMAND ----------
 
