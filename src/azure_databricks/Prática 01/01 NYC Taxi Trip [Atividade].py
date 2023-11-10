@@ -312,7 +312,7 @@ display(
 # COMMAND ----------
 
 localizacao = F.col("PUlocationID") == F.col("DOlocationID")
-tempo_duracao = f.dF.date_diff("")
+tempo_duracao = F.df.date_diff(min, "tpep_pickup_datetime", "tpep_dropoff_datetime").alias
 
 # COMMAND ----------
 
