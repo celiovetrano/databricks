@@ -40,6 +40,19 @@ spark.sql(query).display()
 
 # COMMAND ----------
 
+df.createOrReplaceTempView("taxi_trips")
+
+# COMMAND ----------
+
+query = """
+    SELECT *
+    FROM taxi_trips
+"""
+
+spark.sql(query).display()
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ## Perguntas de negócio
 
@@ -121,6 +134,40 @@ display(df)
 
 # COMMAND ----------
 
+import pyspark.sql.functions as F
+
+# COMMAND ----------
+
+display(
+    df
+    .withColumn('trip_type', F.when(
+        F.col("trip_distance")<2, "curta"
+        ).otherwise("longa")
+    )
+    .filter(
+        F.dayofweek("tpep_pickup_datetime").isin([1,7])
+    )
+    .groupby("trip_type")
+    .count()
+)
+
+# COMMAND ----------
+
+display(
+    df
+    .withColumn('trip_type', F.when(
+        F.col("trip_distance")<2, "curta"
+        ).otherwise("longa")
+    )
+    .filter(
+        F.dayofweek("tpep_pickup_datetime").between(2,6)
+    )
+    .groupby("trip_type")
+    .count()
+)
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC #### Pergunta 5: Em quais horários os passageiros dão as melhores gorjetas?
 
@@ -171,6 +218,14 @@ display(df)
 
 # MAGIC %md
 # MAGIC #### Pergunta 6: Qual é o valor médio das corridas por tipo de pagamento?
+
+# COMMAND ----------
+
+display(
+    df
+    .groupBy("payment_type")
+    .count()
+)
 
 # COMMAND ----------
 
