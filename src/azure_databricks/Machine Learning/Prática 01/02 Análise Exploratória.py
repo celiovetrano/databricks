@@ -7,7 +7,7 @@ import seaborn as sns
 
 # COMMAND ----------
 
-repository_path = "file:/Workspace/Repos/celio.vetrano@gmail.com/Mastercloud-Trilha-03-Onda-2/"
+repository_path = "file:/Workspace/Repos/celio.vetrano@gmail.com/databrinks/"
 data_path = repository_path + "src/azure_databricks/data/"
 
 # COMMAND ----------
@@ -94,6 +94,22 @@ plt.show()
 
 # COMMAND ----------
 
+df['salario_mensal'] = df['salario_mensal'].apply(np.log)
+
+# COMMAND ----------
+
+sns.boxplot(x='inadimplente', y='salario_mensal', data=df)
+plt.title('Boxplot de Idade por Inadimplência')
+plt.show()
+
+# COMMAND ----------
+
+sns.boxplot(x='inadimplente', y='salario_mensal', data=df_filtrado)
+plt.title('Boxplot de Idade por Inadimplência')
+plt.show()
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC #### Scatter Plots (Nuvem de pontos)
 # MAGIC Conceito:
@@ -110,11 +126,37 @@ plt.show()
 
 # COMMAND ----------
 
-plt.scatter(df['idade'], df['salario_mensal'])
+# Calculando Q1 e Q3
+Q1 = df['salario_mensal'].quantile(0.25)
+Q3 = df['salario_mensal'].quantile(0.75)
+IQR = Q3 - Q1
+ 
+# Definindo limites para outliers
+limite_inferior = Q1 - 1.5 * IQR
+limite_superior = Q3 + 1.5 * IQR
+ 
+# Removendo os outliers
+df_filtrado = df[(df['salario_mensal'] >= limite_inferior) & (df['salario_mensal'] <= limite_superior)]
+ 
+# Visualizando o resultado
+print("Original:", df.shape)
+print("Após remoção de outliers:", df_filtrado.shape)
+
+# COMMAND ----------
+
+plt.scatter(df_filtrado['idade'], df_filtrado['salario_mensal'])
 plt.title('Scatter Plot de Idade vs Renda')
 plt.xlabel('Idade')
 plt.ylabel('Renda')
 plt.show()
+
+# COMMAND ----------
+
+sns.pairplot(df_filtrado)
+
+# COMMAND ----------
+
+df_filtrado.corr()
 
 # COMMAND ----------
 
