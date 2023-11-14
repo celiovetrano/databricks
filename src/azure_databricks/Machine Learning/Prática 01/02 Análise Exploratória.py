@@ -7,7 +7,7 @@ import seaborn as sns
 
 # COMMAND ----------
 
-repository_path = "file:/Workspace/Repos/celio.vetrano@gmail.com/databrinks/"
+repository_path = "file:/Workspace/Repos/celio.vetrano@gmail.com/databricks/"
 data_path = repository_path + "src/azure_databricks/data/"
 
 # COMMAND ----------
@@ -203,3 +203,7 @@ df_silver = spark.createDataFrame(df)
 # COMMAND ----------
 
 df_silver.write.parquet(data_path+"gold/credito_inadimplencia", mode="overwrite")
+
+# COMMAND ----------
+
+df.corr()

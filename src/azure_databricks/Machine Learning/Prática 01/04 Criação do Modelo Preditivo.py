@@ -7,7 +7,7 @@ import seaborn as sns
 
 # COMMAND ----------
 
-repository_path = "file:/Workspace/Repos/emanuelfontelles@hotmail.com/Mastercloud-Trilha-03-Onda-2/"
+repository_path = "file:/Workspace/Repos/celio.vetrano@gmail.com/databricks/"
 data_path = repository_path + "src/azure_databricks/data/"
 
 # COMMAND ----------
@@ -52,6 +52,10 @@ X_train.shape, X_test.shape
 
 # COMMAND ----------
 
+display(X_train)
+
+# COMMAND ----------
+
 # MAGIC %md
 # MAGIC ##### Utilizaremos um modelo do tipo Boosting para treinamento dos nossos dados
 
@@ -65,6 +69,10 @@ from sklearn.metrics import classification_report, accuracy_score
 # Criação e treinamento do modelo com LightGBM
 model = LGBMClassifier(objective='binary', class_weight='balanced')
 model.fit(X_train, y_train)
+
+# COMMAND ----------
+
+display(X_test)
 
 # COMMAND ----------
 
