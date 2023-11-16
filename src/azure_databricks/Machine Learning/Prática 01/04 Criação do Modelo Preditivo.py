@@ -16,7 +16,7 @@ import seaborn as sns
 
 # COMMAND ----------
 
-repository_path = "file:/Workspace/Repos/emanuelfontelles@hotmail.com/Mastercloud-Trilha-03-Onda-2/"
+repository_path = "file:/Workspace/Repos/celio.vetrano@gmail.com/databricks/"
 data_path = repository_path + "src/azure_databricks/data/"
 
 # COMMAND ----------
