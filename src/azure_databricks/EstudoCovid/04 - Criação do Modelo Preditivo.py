@@ -74,7 +74,7 @@ display(X)
 
 from sklearn.model_selection import train_test_split
 
-X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.2, random_state=42)
+X_train, X_test, y_train, y_test = train_test_split(X, y, test_size=0.3, random_state=42)
 
 # COMMAND ----------
 
@@ -110,7 +110,7 @@ display(X_test)
 
 # COMMAND ----------
 
-X_test.iloc[0]
+X_test.iloc[5]
 
 # COMMAND ----------
 
@@ -118,11 +118,11 @@ model.predict(X_test)[0]
 
 # COMMAND ----------
 
-model.predict_proba(X_test)[1]
+model.predict_proba(X_test)[0]
 
 # COMMAND ----------
 
-1000*model.predict_proba(X_test)[1,0]
+1000*model.predict_proba(X_test)[0,0]
 
 # COMMAND ----------
 
@@ -162,18 +162,6 @@ plt.show()
 
 # COMMAND ----------
 
-shap_values = explainer.shap_values(X)
-# Choose SHAP values for the positive class (usually index 1)
-shap_values_positive_class = shap_values[1]
-# Select a specific row index to plot (e.g., the first row)
-row_index = 100
-# Generate decision plot for the selected row
-shap.decision_plot(base_value=explainer.expected_value[1],
-                                       shap_values=shap_values_positive_class[row_index],
-                                                           features=X.iloc[row_index])
-
-# COMMAND ----------
-
 quality_mapping = {3: 0, 4: 1, 5: 2, 6: 3, 7: 4, 8: 5}
 df['quality'] = df['quality'].map(quality_mapping)
 
@@ -191,6 +179,10 @@ df['quality'] = df['quality'].map(quality_mapping)
 # COMMAND ----------
 
 import lightgbm as lgb
+
+
+# COMMAND ----------
+
 
 # Plotando a primeira árvore de decisão
 lgb.plot_tree(model, figsize=(40, 20), show_info=['split_gain', 'internal_value', 'internal_count', 'leaf_count'])
@@ -227,6 +219,29 @@ shap_values = explainer.shap_values(X)
 
 # Visualização de SHAP values
 shap.summary_plot(shap_values, X)
+
+# COMMAND ----------
+
+shap_values = explainer.shap_values(X)
+# Choose SHAP values for the positive class (usually index 1)
+shap_values_positive_class = shap_values[1]
+# Select a specific row index to plot (e.g., the first row)
+row_index = 100
+# Generate decision plot for the selected row
+shap.decision_plot(base_value=explainer.expected_value[1],
+                                       shap_values=shap_values_positive_class[row_index],
+                                                           features=X.iloc[row_index])
+
+# COMMAND ----------
+
+# Choose SHAP values for the positive class (usually index 1)
+shap_values_positive_class = shap_values[1]
+# Select a specific row index to plot (e.g., the first row)
+row_index = 0
+# Generate decision plot for the selected row
+shap.decision_plot(base_value=explainer.expected_value[1],
+                                       shap_values=shap_values_positive_class[row_index],
+                                                           features=X.iloc[row_index])
 
 # COMMAND ----------
 

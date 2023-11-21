@@ -48,11 +48,11 @@ display(df.describe())
 
 # COMMAND ----------
 
- train = df
+ ##train = df
 
- train['Covid'] = [0 if i >= 4 else 1 for i in train.CLASIFFICATION_FINAL]
+ ##train['Covid'] = [0 if i >= 4 else 1 for i in train.CLASIFFICATION_FINAL]
 
- display(train)
+ ##display(train)
 
 
 # COMMAND ----------
@@ -211,7 +211,7 @@ plt.show()
 
 # COMMAND ----------
 
-df["AGE"].hist(bins= 5)
+df["AGE"].hist(bins= 10)
 plt.title('Idade dos Pacientes')
 plt.xlabel('Idade')
 plt.ylabel('Pacientes')
@@ -219,15 +219,15 @@ plt.show()
 
 # COMMAND ----------
 
-df['HIPERTENSION'].value_counts()
+df['HIPERTENSION'].value_counts(normalize=True)
 
 # COMMAND ----------
 
-df['INTUBED'].value_counts()
+df['INTUBED'].value_counts(normalize=True)
 
 # COMMAND ----------
 
-df['PNEUMONIA'].value_counts()
+df['PNEUMONIA'].value_counts(normalize=True)
 
 # COMMAND ----------
 
@@ -235,11 +235,11 @@ df['AGE'].value_counts()
 
 # COMMAND ----------
 
-df['PREGNANT'].value_counts()
+df['PREGNANT'].value_counts(normalize=True)
 
 # COMMAND ----------
 
-df['DIABETES'].value_counts()
+df['DIABETES'].value_counts(normalize=True)
 
 # COMMAND ----------
 
@@ -249,10 +249,6 @@ df["PNEUMONIA"].describe()
 
 ## Removendo a coluna Classificação Final
 df = df.drop('CLASIFFICATION_FINAL', axis=1)
-
-# COMMAND ----------
-
-
 
 # COMMAND ----------
 
@@ -414,7 +410,31 @@ df[['USMER', 'MEDICAL_UNIT', 'SEX', 'PATIENT_TYPE', 'INTUBED', 'PNEUMONIA', 'AGE
 
 # COMMAND ----------
 
-df['idade_cat'] = pd.cut(df['idade'], bins=list(range(18, 81, 5)), right=False)
+doencasCronicas=['DIABETES', 'ASTHMA', 'INMSUPR', 'HIPERTENSION', 'OTHER_DISEASE', 'CARDIOVASCULAR', 'OBESITY', 'RENAL_CHRONIC']
+
+# COMMAND ----------
+
+df[doencasCronicas]
+
+# COMMAND ----------
+
+df['quantidade_doencas'] = df[doencasCronicas].apply(lambda x: (x == 1).sum(), axis=1)
+
+# COMMAND ----------
+
+display(df)
+
+# COMMAND ----------
+
+df['quantidade_doencas'].value_counts(normalize=True)
+
+# COMMAND ----------
+
+df.groupby('quantidade_doencas')['DEATH'].value_counts(normalize=True)
+
+# COMMAND ----------
+
+df.groupby('quantidade_doencas')['DEATH'].mean().plot.bar()
 
 # COMMAND ----------
 
